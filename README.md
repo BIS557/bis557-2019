@@ -1,7 +1,7 @@
 Office Hours
 ------------
 
-Tuesdays 10:00 AM - 12:00 PM
+Tuesdays 10:30 AM - 11:50 PM
 
 Teaching Assistant
 ------------------

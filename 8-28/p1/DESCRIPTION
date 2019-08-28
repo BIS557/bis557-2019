@@ -1,0 +1,13 @@
+Package: p1
+Title: A Demonstration Package for BIS557
+Version: 0.0.1
+Authors@R: 
+    person(given = "Michael",
+           family = "Kane",
+           role = c("aut", "cre"),
+           email = "michael.kane@yale.edu")
+Description: Demonstrates package usage
+License: LGPL-2
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.1.1
