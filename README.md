@@ -40,6 +40,12 @@ this class you will need to be able to prove characteristics of a model,
 create algorithms for fitting models, and write R and Python code to
 implement those algorithms.
 
+Style Standards
+---------------
+
+For this class, we will follow the style standards specified
+[here](http://adv-r.had.co.nz/Style.html).
+
 Assignments
 -----------
 

@@ -29,6 +29,10 @@ Equal weight will be given to homeworks, a midterm project, and a cumulative fin
 
 The goal of this class is to develop the skills required to design and implement algorithms for statistical analyses. We will work toward those goals by studying some of the most successful statistical procedures currently in use and implementing them in R and Python. To do well in this class you will need to be able to prove characteristics of a model, create algorithms for fitting models, and write R and Python code to implement those algorithms.
 
+## Style Standards
+
+For this class, we will follow the style standards specified [here](http://adv-r.had.co.nz/Style.html).
+
 ## Assignments
 
 Assignments will be given about every two weeks and will cover material concurrent with the lectures. Late assignments late will be penalized heavily. 
