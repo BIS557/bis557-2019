@@ -1,0 +1,33 @@
+---
+title: "Greeting with Function"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Greeting with Function}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Set-up
+
+This is a simple package to illustrate package creation, documentation, and testing.
+
+```{r setup}
+library(p1)
+hello("BIS557")
+```
+
+# A simple plotting example
+
+## Subsection: a plot with ggplot2
+```{r simple_plot, echo = FALSE}
+library(ggplot2)
+ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
+  geom_point() + 
+  theme_minimal()
+```
+
+
+$$
+Y = X \widehat{\beta} + \varepsilon
+$$
+

@@ -46,6 +46,12 @@ Style Standards
 For this class, we will follow the style standards specified
 [here](http://adv-r.had.co.nz/Style.html).
 
+Reference for Writing R Packages
+--------------------------------
+
+You may want to look [here](http://r-pkgs.had.co.nz/) for a reference on
+building R packages.
+
 Assignments
 -----------
 

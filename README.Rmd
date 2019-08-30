@@ -33,6 +33,10 @@ The goal of this class is to develop the skills required to design and implement
 
 For this class, we will follow the style standards specified [here](http://adv-r.had.co.nz/Style.html).
 
+## Reference for Writing R Packages
+
+You may want to look [here](http://r-pkgs.had.co.nz/) for a reference on building R packages.
+
 ## Assignments
 
 Assignments will be given about every two weeks and will cover material concurrent with the lectures. Late assignments late will be penalized heavily. 
