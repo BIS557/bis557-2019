@@ -12,10 +12,6 @@ ridge_regression <- function(form, data, lambda = 0) {
 
 ridge_regression(Sepal.Length ~., iris)
 
-get_hour <- function(dt) {
-  format(dt, "%H") %>% as.numeric
-}
-
 taxi <- 
   read_csv("https://github.com/statsmaths/ml_data/raw/master/nyc_taxi.csv")
 
