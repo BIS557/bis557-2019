@@ -3,12 +3,8 @@ library(leaflet)
 library(dplyr)
 library(ggplot2)
 library(casl) # devtools::install_github("statsmaths/casl")
-
-ridge_regression <- function(form, data, lambda = 0) {
-  X <- model.matrix(form, data)
-  Y <- data[as.numeric(rownames(X)), as.character(form)[2]]
-  solve( crossprod(X) + diag(rep(lambda, ncol(X))) ) %*% t(X) %*% Y
-}
+library(crayon)
+library(rsample)
 
 ridge_regression(Sepal.Length ~., iris)
 
@@ -42,9 +38,43 @@ fit <- lm(form, data = taxi)
 
 taxi <- na.omit(taxi)
 
+ridge_regression <- function(form, data, lambda = 0) {
+  X <- model.matrix(form, data)
+  # Y <- data[as.numeric(rownames(X)), as.character(form)[2]]
+  Y <- data[[as.character(form)[2]]][as.numeric(rownames(X))]
+  ret <- solve( crossprod(X) + diag(rep(lambda, ncol(X))) ) %*% t(X) %*% Y
+  attributes(ret)$formula <- form
+  class(ret) <- c(class(ret), "ridge_regression")
+  ret
+}
+
+predict.ridge_regression <- function(object, ...) {
+  dots <- list(...)
+  x_frame <- dots[[1]]
+  if (!is.data.frame(x_frame)) {
+    stop(red("The first argument should be a data.frame of values",
+             "to predict"))
+  }
+  X <- model.matrix(attributes(object)$formula, x_frame)
+  X %*% object
+}
+
+
 test <- sample.int(nrow(taxi), 2000)
 train <- setdiff(seq_len(nrow(taxi)), test)
 
 casl_util_rmse( taxi$duration[test], 
-                predict(lm(form, data = taxi[train,]))[test] )
+                predict(lm(form, data = taxi[train,]), taxi[test,]) )
 
+ridge_fit <- ridge_regression(form, taxi[train,], lambda = 0.01)
+
+predict(ridge_fit, taxi[test,])
+
+browser()
+
+casl_util_rmse(taxi$duration[test],
+predict(ridge_regression(form, taxi[train,], lambda = 0.01), taxi[test,]))
+
+#folds <- vfold_cv(iris, 10)
+#training(folds$splits[[1]])
+#testing(folds$splits[[1]])
