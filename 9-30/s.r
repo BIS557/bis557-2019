@@ -6,8 +6,6 @@ library(casl) # devtools::install_github("statsmaths/casl")
 library(crayon)
 library(rsample)
 
-ridge_regression(Sepal.Length ~., iris)
-
 taxi <- 
   read_csv("https://github.com/statsmaths/ml_data/raw/master/nyc_taxi.csv")
 
@@ -39,8 +37,10 @@ fit <- lm(form, data = taxi)
 taxi <- na.omit(taxi)
 
 ridge_regression <- function(form, data, lambda = 0) {
+#  rownames(data) <- NULL
   X <- model.matrix(form, data)
   # Y <- data[as.numeric(rownames(X)), as.character(form)[2]]
+  browser()
   Y <- data[[as.character(form)[2]]][as.numeric(rownames(X))]
   ret <- solve( crossprod(X) + diag(rep(lambda, ncol(X))) ) %*% t(X) %*% Y
   attributes(ret)$formula <- form
@@ -70,10 +70,28 @@ ridge_fit <- ridge_regression(form, taxi[train,], lambda = 0.01)
 
 predict(ridge_fit, taxi[test,])
 
-browser()
 
 casl_util_rmse(taxi$duration[test],
-predict(ridge_regression(form, taxi[train,], lambda = 0.01), taxi[test,]))
+  predict(lm(form, taxi[train,]), taxi[test,]))
+
+casl_util_rmse(taxi$duration[test],
+  predict(ridge_regression(form, taxi[train,], lambda = 0.00005), taxi[test,]))
+
+form <- Sepal.Length ~ . 
+test <- sample.int(nrow(iris), 10)
+train <- setdiff(seq_len(nrow(iris)), test)
+
+form <- Sepal.Length ~ .
+test <- sample.int(nrow(iris), 10)
+train <- setdiff(seq_len(nrow(iris)), test)
+
+casl_util_rmse(iris$Sepal.Length[test],
+  predict(lm(form, iris[train,]), iris[test,]))
+
+casl_util_rmse(iris$Sepal.Length[test],
+  predict(ridge_regression(form, iris[train,], lambda = 0.0), iris[test,]))
+
+
 
 #folds <- vfold_cv(iris, 10)
 #training(folds$splits[[1]])
