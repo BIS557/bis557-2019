@@ -90,7 +90,7 @@ casl_util_rmse(taxi$duration[test],
 library(doParallel)
 registerDoParallel(6)
 
-lambdas <- seq(0, 0.5, 0.01)
+lambdas <- seq(0, 0.5, 0.005)
 rmse <- foreach(lambda = lambdas, .combine = c) %dopar% {
   casl_util_rmse(taxi$duration[test],
     predict(ridge_regression(form, taxi[train,], lambda = lambda), 
@@ -101,7 +101,8 @@ ggplot(tibble(lambda = lambdas, RMSE = rmse), aes(x = lambda, y = RMSE)) +
   geom_point(size = 5) +  
   theme_minimal()
 
-folds <- vfold_cv(taxi, 10)
+#folds <- vfold_cv(taxi[sample.int(nrow(taxi), 300),], 10)
+folds <- vfold_cv(taxi[sample.int(nrow(taxi), 300),], 10)
 
 # Get the first training data set.
 train1 <- training(folds$splits[[1]])
@@ -116,4 +117,18 @@ rmses <- foreach(lambda = lambdas, .combine = rbind) %dopar% {
                                testing(folds$splits[[i]])))
   }
 }
+
+edf <- tibble(mean = apply(rmses, 1, mean),
+              sd = apply(rmses, 1, sd),
+              lambda = lambdas) %>%
+  mutate(upper = mean + 2 * sd / nrow(edf),
+         lower = mean - 2 * sd / nrow(edf))
+
+ggplot(edf, aes(x = lambdas, y = mean, ymin = lower, ymax = upper)) +
+  geom_errorbar() +
+  theme_minimal() +
+  geom_point(aes(color = "red")) +
+  ylab("Root Mean Square Error") +
+  xlab(expression(lambda))
+
 
