@@ -8,6 +8,10 @@
 #
 
 library(shiny)
+library(glmnet)
+
+X <- readRDS("X.rds")
+prop_helpful <- readRDS("prop_helpful.rds")
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
@@ -18,21 +22,17 @@ ui <- fluidPage(
    # Sidebar with a slider input for number of bins 
    sidebarLayout(
       sidebarPanel(
-         sliderInput("bins",
-                     "Number of bins:",
-                     min = 1,
-                     max = 50,
-                     value = 30),
-         sliderInput("bins2",
-                     "A test slider:",
-                     min = 1,
-                     max = 50,
-                     value = 30)
-      ),
+         sliderInput("alpha",
+                     "Alpha:",
+                     min = 0,
+                     max = 1,
+                     value = 1,
+                     0.01)      ),
       
       # Show a plot of the generated distribution
       mainPanel(
-         plotOutput("distPlot")
+         plotOutput("distPlot"),
+         dataTableOutput("table_output")
       )
    )
 )
@@ -41,12 +41,17 @@ ui <- fluidPage(
 server <- function(input, output) {
    
    output$distPlot <- renderPlot({
-      # generate bins based on input$bins from ui.R
-      x    <- faithful[, 2] 
-      bins <- seq(min(x), max(x), length.out = input$bins + 1)
-      bins <- input$bins2
-      # draw the histogram with the specified number of bins
-      hist(x, breaks = bins, col = 'darkgray', border = 'white')
+     plot(cv.glmnet(X, prop_helpful, alpha = input$alpha))
+   })
+   
+   output$table_output <- renderDataTable({
+     fit <- cv.glmnet(X, prop_helpful, alpha = input$alpha)
+     betas <- fit$glmnet.fit$beta
+     row_sum <- apply(betas, 1, sum)
+     betas <- betas[row_sum != 0,]
+     col_sum <- apply(betas, 2, sum)
+     betas <- betas[col_sum != 0,]
+     betas
    })
 }
 

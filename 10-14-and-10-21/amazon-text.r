@@ -22,7 +22,6 @@ uss <- as.numeric(unlist(ss))
 muss <- matrix(uss, ncol = 2, byrow = TRUE)
 
 
-
 # Keep the reviews where at least 100 people
 # characterized the review.
 reviews <- reviews[ helpful[,2] >= 100,]
@@ -38,11 +37,13 @@ X <- tokenize_words(reviews$reviewText) %>%
 # Get rid of the stopwords.
 X <- X[, !(colnames(X) %in% stopwords())]
 
-
 intercept <- mean(prop_helpful)
 print(intercept)
 
-gfit <- cv.glmnet(X, prop_helpful)
+saveRDS(X, "word-analysis/X.rds")
+saveRDS(prop_helpful, "word-analysis/prop_helpful.rds")
+
+gfit <- cv.glmnet(X, prop_helpful, alpha = 0.5)
 
 # Plot the out-of-sample mean square errors.
 resid_est <- as_tibble(gfit[c("cvm", "cvup", "cvlo", "lambda")]) %>%
