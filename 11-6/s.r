@@ -2,6 +2,8 @@
 # https://keras.rstudio.com/articles/examples/mnist_cnn.html
 library(keras)
 
+# use_python("/usr/local/bin/python3")
+
 # Data Preparation -----------------------------------------------------
 
 batch_size <- 128
