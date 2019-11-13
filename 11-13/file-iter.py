@@ -1,6 +1,10 @@
 import numpy as np
 
+import pdb
+
 def text_to_vec(x):
+  # pdb.set_trace()
+  # http://bwlewis.github.io/1000_genomes_examples/PCA.html
   return np.array([float(r) for r in x.strip().replace(" ", "").split(",")])
   
 def FileIter(file_name, chunk_size = 10, skip = 1):
@@ -17,6 +21,7 @@ def FileIter(file_name, chunk_size = 10, skip = 1):
       f.seek(current_pos)
       yield ret
 
+next(FileIter("x.csv"))
 
 i = 0
 for y_chunk, x_chunk in zip(FileIter("y.csv"), FileIter("x.csv")):
